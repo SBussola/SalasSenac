@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário de Salas (ficticio)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .schedule {
+            margin: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diário de Salas</h1>
+    <div id="agenda" class="schedule"></div>
+    <div class="nome">
+        <h2>Senac</h2>
+    </div>
+
+    <script>
+        // Definições de horários e salas
+        const cronograma = {
+            segunda: {
+                "08:00 - 12:00": { "sala 01": "Português", "sala 02": "Matemática" },
+                "13:00 - 17:30": { "sala 01": "Física", "sala 02": "Biologia" },
+                "18:40 - 22:00": { "sala 01": "ADS", "sala 02": "Enfermagem" }
+            },
+            terça: {
+                "08:00 - 12:00": { "sala 01": "Inglês", "sala 02": "Matemática" },
+                "13:00 - 17:30": { "sala 01": "Geografia", "sala 02": "Tec Adm" },
+                "18:40 - 22:00": { "sala 01": "ADS", "sala 02": "Medicina" }
+            },
+            terça: {
+                "08:00 - 12:00": { "sala 01": "Inglês", "sala 02": "Matemática" },
+                "13:00 - 17:30": { "sala 01": "Geografia", "sala 02": "Tec Adm" },
+                "18:40 - 22:00": { "sala 01": "ADS", "sala 02": "Medicina" }
+            },
+            quarta: {
+                "08:00 - 12:00": { "sala 01": "Inglês", "sala 02": "Matemática" },
+                "13:00 - 17:30": { "sala 01": "Geografia", "sala 02": "Tec Adm" },
+                "18:40 - 22:00": { "sala 01": "ADS", "sala 02": "Medicina" }
+            },
+            quinta: {
+                "08:00 - 12:00": { "sala 01": "Inglês", "sala 02": "Matemática" },
+                "13:00 - 17:30": { "sala 01": "Geografia", "sala 02": "Tec Adm" },
+                "18:40 - 22:00": { "sala 01": "ADS", "sala 02": "Medicina" }
+            },
+            sexta: {
+                "08:00 - 12:00": { "sala 01": "Inglês", "sala 02": "Matemática" },
+                "13:00 - 17:30": { "sala 01": "Geografia", "sala 02": "Tec Adm" },
+                "18:40 - 22:00": { "sala 01": "ADS", "sala 02": "Medicina" }
+            },
+            sabádo: {
+                "08:00 - 12:00": { "sala 01": "Inglês", "sala 02": "Matemática" }
+                
+            },
+            
+        };
+
+        // Função para formatar a data e hora
+        function formatarData() {
+            const diasDaSemana = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+            const hoje = new Date();
+            const diaSemana = diasDaSemana[hoje.getDay()];
+            const horaAtual = hoje.getHours() + ':' + String(hoje.getMinutes()).padStart(2, '0');
+            return { diaSemana, horaAtual };
+        }
+
+        // Função para verificar se o horário está no intervalo atual
+        function isWithinTimeRange(horaAtual, horarioInicio, horarioFim) {
+            return horaAtual >= horarioInicio && horaAtual <= horarioFim;
+        }
+
+        // Função para gerar o cronograma para o dia atual e horário atual
+        function gerarCronograma(diaSemana, horaAtual) {
+            const agenda = document.getElementById('agenda');
+            const horarios = cronograma[diaSemana];
+
+            if (horarios) {
+                let html = `<h2>${diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1)}</h2>`;
+                for (const horario in horarios) {
+                    const [horarioInicio, horarioFim] = horario.split(' - ');
+                    if (isWithinTimeRange(horaAtual, horarioInicio, horarioFim)) {
+                        html += `<h3>${horario}</h3><ul>`;
+                        for (const sala in horarios[horario]) {
+                            html += `<li>${sala}: ${horarios[horario][sala]}</li>`;
+                        }
+                        html += `</ul>`;
+                    }
+                }
+                if (!html.includes('<h3>')) {
+                    html += `<p>Nenhuma sala em atividade no momento.</p>`;
+                }
+                agenda.innerHTML = html;
+            } else {
+                agenda.innerHTML = `<p>Não há programação disponível para hoje.</p>`;
+            }
+        }
+
+        // Obter o dia atual e gerar o cronograma
+        const { diaSemana, horaAtual } = formatarData();
+        gerarCronograma(diaSemana, horaAtual);
+    </script>
+</body>
+</html>
